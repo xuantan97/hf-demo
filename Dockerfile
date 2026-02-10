@@ -12,10 +12,9 @@ RUN groupadd -g 10014 choreo && \
 
 COPY . .
 
-# Fix ownership using correct names
-RUN chown -R choreouser:choreo /app
+RUN chown -R 10014:10014 /app
 
-USER choreouser
+USER 10014
 
 EXPOSE 8000
 
