@@ -6,16 +6,17 @@ COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN addgroup -g 10014 choreo && \
-    adduser  --disabled-password  --no-create-home --uid 10014 --ingroup choreo choreouser
+# Create group and user correctly for Debian
+RUN groupadd -g 10014 choreo && \
+    useradd -u 10014 -g choreo -M -s /usr/sbin/nologin choreouser
 
 COPY . .
 
-RUN chown -R appuser:appgroup /app
+# Fix ownership using correct names
+RUN chown -R choreouser:choreo /app
 
-USER 10014
+USER choreouser
 
 EXPOSE 8000
 
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
-
